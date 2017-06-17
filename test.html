@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+</head>
+<body>
+<form action="/cloudadmin/goodsProcess?action=upload" enctype="multipart/form-data" method="post">
+    <input type="file" name="goods_img" id="file">
+    <input type="text" name="user_token" id="user_token" value="3nd950jf067beuner519nsi4h3">
+    <input type="text" name="resource_name" id="resource_name" value="goods_img">
+    <input type="submit" value="提交">
+    <input type="button" value="ajax提交" onclick="uploadAjax()">
+</form>
+</body>
+<script type="text/javascript">
+function uploadAjax(){
+  //Content-Type:multipart/form-data
+  var file = document.getElementById('file').files[0]
+  console.log(file)
+  var user_token = document.getElementById('user_token').value;
+  var resource_name = document.getElementById('resource_name').value;
+  var oData = new FormData();
+  oData.append( "goods_img", file);
+  oData.append('user_token',user_token)
+  oData.append('resource_name',resource_name)
+  var XHR = new XMLHttpRequest();
+  XHR.open( "POST", "/cloudadmin/goodsProcess?action=upload" , true );
+  //XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  XHR.onreadystatechange  = function(oEvent) {
+      if (XHR.readyState == 4 && XHR.status == 200) {
+        var responseJSON = JSON.parse(XHR.responseText)
+          console.log(responseJSON)
+     } else if(XHR.readyState == 4 && XHR.status != 200){
+          console.log('error:'+XHR.responseText)
+     }
+  };
+  XHR.send(oData);
+}
+</script>
+</html>
